@@ -33,6 +33,7 @@ if (page == "Accueil"):
 
 elif (page == "La maladie d'Ebola"):
     st.title("Ebola - Présentation")
+    st.video("https://www.youtube.com/watch?v=eXD6Oe6S_SY&ab_channel=ARTE")
     st.write(
         "Le virus Ebola est l'agent infectieux qui provoque, chez l'humain et les autres primates, des fièvres souvent hémorragiques — la maladie à virus Ebola — à l'origine d'épidémies historiques notables par leur ampleur et leur sévérité. La transmission entre humains a lieu avant tout par contact direct avec des fluides corporels.")
     st.write(
@@ -42,7 +43,7 @@ elif (page == "La maladie d'Ebola"):
         "Cette image ci-dessous représente les symptômes distinctifs d'une personne contaminée par le virus Ebola.")
     st.image("symptomes.jpg")
 
-    st.write("La maladie à virus Ebola est une maladie virale aiguë sévère.")
+    st.header("La maladie à virus Ebola est une maladie virale aiguë sévère.")
     st.write(
         "• Durée d’incubation (temps écoulé entre l’infection et l’apparition des symptômes) : très variable, de 2 à 21 jours.")
     st.write(
@@ -129,12 +130,43 @@ elif (page == "Présentation du projet"):
     st.subheader("L'arrivée des soins :")
     st.write("Quelles mesures ont été prises pour endiquer la progression de l'épidémie ? Le Sierra-Leone, pays le plus touché a décrété un confinement de la population du 19 au 21 septembre. Or on peut voir d'après la courbe que ce confinement n'a pas eu d'effet, les cas augmentent toujours autant.")
     st.write("La communauté internationale a ensuite envoyé de nombreuses équipes de médecins et du matériel pour tenter d'aider les équipes locales. Hélicoptères, véhicules et soignants ont permis de soigner les malades, ceci est observable par l'atténuation de la courbe des morts qui stagne pendant une semaine puis repart à la hausse mais avec un coefficient plus bas que précedemment.")
+    st.write("Fin Mars 2015, Le Sierra-Leone décrète un nouveau confinement général de la population, cette fois plus long que le premier. On peut supposer que ce confineement a été efficace car la courbe des cas s'atténue.")
     st.subheader("La fin de l'épidémie :")
     st.write("Début Mai 2015, l'OMS annonce la fin de l'épidémie d'Ebola. Quelques cas seront toujours rescencés mais contrôlés, les morts seront beaucoup moins nombreux.")
 
+    # ---------------------------------graphs données par pays------------------------------
+    mask = df["Date"] == "2016-03-23"
+    stackedgraph = df[mask]
+    stackedgraph = stackedgraph.reset_index()
+    #Affiche le dataset
+    #st.write(stackedgraph)
 
 
+    Countries1 = [ "Mali", "Nigeria", "Senegal", "Italy", "Spain", "United Kingdom",
+                 "United States of America"]
+    Countries2 = ["Guinea", "Sierra Leone", "Liberia"]
 
+    p = figure(plot_width=600, plot_height=500, y_range=Countries2)
+    p.title.text = 'Cases and deaths for the top3 countries'
+    p.hbar(right='Cumulative no. of confirmed, probable and suspected cases', y='Country', legend_label="Total cases",
+           color=("orange"), muted_color="orange", muted_alpha=0.2, source=stackedgraph, height=0.3)
+    p.hbar(right='Cumulative no. of confirmed, probable and suspected deaths', y='Country', legend_label="Total deaths",
+           color=("red"), muted_color="red", muted_alpha=0.2, source=stackedgraph, height=0.3)
+    p.x_range.start = 0
+    p.legend.location = "top_right"
+    p.legend.click_policy = "mute"
+    st.write(p)
+
+    p = figure(plot_width=500, plot_height=500, y_range=Countries1)
+    p.title.text = 'Cases and deaths for the others countries'
+    p.hbar(right='Cumulative no. of confirmed, probable and suspected cases', y='Country', legend_label="Total cases",
+           color=("orange"), muted_color="orange", muted_alpha=0.2, source=stackedgraph, height=0.3)
+    p.hbar(right='Cumulative no. of confirmed, probable and suspected deaths', y='Country', legend_label="Total deaths",
+           color=("red"), muted_color="red", muted_alpha=0.2, source=stackedgraph, height=0.3)
+    p.x_range.start = 0
+    p.legend.location = "top_right"
+    p.legend.click_policy = "mute"
+    st.write(p)
 
     # ---------------------------------- MAP INTERACTIVE --------------------------------
 
@@ -209,40 +241,33 @@ elif (page == "Présentation du projet"):
     # call to render Folium map in Streamlit
     folium_static(m)
 
-    dfcases = df.groupby(["Country", "Date"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
-    st.write(dfcases)
-
+    #inutile - a supprimer
+    #dfcases = df.groupby(["Country", "Date"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
+    #st.write(dfcases)
 
     test = df
-    output = test.groupby(["Date","Country"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
+    output = test.groupby(["Date", "Country"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
     output
     output = output.reset_index()
 
-
     fig = px.choropleth(df, locations="Country", color="Cumulative no. of confirmed, probable and suspected cases",
-                    locationmode='country names', hover_name="Country",
-                    animation_frame=df["Date"].dt.strftime('%Y-%m-%d'),
-                    title='Ebola spread over time', color_continuous_scale="Sunsetdark")
+                        locationmode='country names', hover_name="Country",
+                        animation_frame=df["Date"].dt.strftime('%Y-%m-%d'),
+                        title='Ebola spread over time', color_continuous_scale="Sunsetdark")
     fig.update(layout_coloraxis_showscale=False)
     st.plotly_chart(fig)
 
 
 
-    #graph données par pays
-    p = figure(plot_width=400, plot_height=400)
-    p.hbar_stack(['Cumulative no. of confirmed, probable and suspected cases', 'Cumulative no. of confirmed, probable and suspected deaths'], y='index', height=0.8, color=("grey", "lightgrey"), source=output)
-    st.write(p)
-
-
-
-
-
-
 elif (page == "Voir le dataset"):
     # ouverture et affichage du csv
+    st.title("Les datasets utilisés : ")
     df = pd.read_csv("ebola_2014_2016_clean.csv")
-    st.title("Ebola dataset 2014 - 2016")  # titre du csv
+    st.subheader("Ebola dataset 2014 - 2016")  # titre du csv
+    st.write("Ce dataset provient de ce lien: https://www.kaggle.com/imdevskp/ebola-outbreak-20142016-complete-dataset")
     st.write(df)
 
+    st.subheader("Dates importantes")
+    st.write("Ce dataset a été crée par notre équipe afin de rassembler les dates importantes liées à l'épidémie d'Ebola.")
     date["date"] = pd.to_datetime(date["date"])
     st.write(date)
