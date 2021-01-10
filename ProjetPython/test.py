@@ -8,7 +8,7 @@ import pandas as pd
 from streamlit_folium import folium_static
 import folium
 import json
-from bokeh.plotting import figure, show
+from bokeh.plotting import figure
 from bokeh.models import HoverTool, Title
 import plotly.express as px
 import datetime
@@ -134,7 +134,14 @@ elif (page == "Présentation du projet"):
     st.subheader("La fin de l'épidémie :")
     st.write("Début Mai 2015, l'OMS annonce la fin de l'épidémie d'Ebola. Quelques cas seront toujours rescencés mais contrôlés, les morts seront beaucoup moins nombreux.")
 
-    # ---------------------------------graphs données par pays------------------------------
+
+    #---------------------------------------------------------------------------------------
+    # ---------------------------------GRAPHS DONNEES PAR PAYS------------------------------
+    #---------------------------------------------------------------------------------------
+
+
+    st.header("** Etude des cas par pays : **")
+
     mask = df["Date"] == "2016-03-23"
     stackedgraph = df[mask]
     stackedgraph = stackedgraph.reset_index()
@@ -156,6 +163,7 @@ elif (page == "Présentation du projet"):
     p.legend.location = "top_right"
     p.legend.click_policy = "mute"
     st.write(p)
+    st.write("")
 
     p = figure(plot_width=500, plot_height=500, y_range=Countries1)
     p.title.text = 'Cases and deaths for the others countries'
@@ -247,10 +255,10 @@ elif (page == "Présentation du projet"):
 
     test = df
     output = test.groupby(["Date", "Country"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
-    output
+    #st.write(output)
     output = output.reset_index()
 
-    fig = px.choropleth(df, locations="Country", color="Cumulative no. of confirmed, probable and suspected cases",
+    fig = px.choropleth(df, width=1100, height=700,  locations="Country", color="Cumulative no. of confirmed, probable and suspected cases",
                         locationmode='country names', hover_name="Country",
                         animation_frame=df["Date"].dt.strftime('%Y-%m-%d'),
                         title='Ebola spread over time', color_continuous_scale="Sunsetdark")
