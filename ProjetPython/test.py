@@ -29,7 +29,6 @@ if (page == "Accueil"):
     st.image("streamlit_logo.png")
     st.write(
         "Ce projet est de créer un dashboard sur un dataset en streamlit. L'objectif est d'analyser le dataset et de comprendre comment l'épidémie s'est propagée en Afrique et en Europe ainsi que de voir comment la communauté internationale a pu gérer cette crise.")
-    st.write("Lien de notre Github : https://github.com/Quercus00/Ebola-dashboard")
 
 elif (page == "La maladie d'Ebola"):
     st.title("Ebola - Présentation")
@@ -37,7 +36,7 @@ elif (page == "La maladie d'Ebola"):
     st.write(
         "Le virus Ebola est l'agent infectieux qui provoque, chez l'humain et les autres primates, des fièvres souvent hémorragiques — la maladie à virus Ebola — à l'origine d'épidémies historiques notables par leur ampleur et leur sévérité. La transmission entre humains a lieu avant tout par contact direct avec des fluides corporels.")
     st.write(
-        "La maladie qu'il engendre, pour laquelle il n'existe pas jusqu'ici de traitement homologué, présente un taux de létalité allant de 25 % à 90 % chez l'humain ; l'épidémie qui a sévi en Afrique de l'Ouest en 2014 et 2015 affichait ainsi une létalité de 39,5 % au 27 mars 2016, avec 11 323 morts sur 28 646 cas recensés.Après un test efficace en 2015 lors d'une épidémie en Guinée, un premier vaccin a été annoncé à la fin de 2016 et utilisé pour une campagne vaccinale en Afrique de l'Ouest en 2017 ainsi qu’en République démocratique du Congo en 2019")
+        "La maladie qu'il engendre, pour laquelle il n'existe pas jusqu'ici de traitement homologué, présente un taux de létalité allant de 25 % à 90 % chez l'humain ; l'épidémie qui a sévi en Afrique de l'Ouest en 2014 et 2015 affichait ainsi une létalité de 39,5 % au 27 mars 2016, avec 11 323 morts sur 28 646 cas recensés.Après un test efficace en 2015 lors d'une épidémie en Guinée, un premier vaccin a été annoncé à la fin de 2016 et utilisé pour une campagne vaccinale en Afrique de l'Ouest en 2017 ainsi qu’en République démocratique du Congo en 2019.")
     st.header("Les symptômes")
     st.write(
         "Cette image ci-dessous représente les symptômes distinctifs d'une personne contaminée par le virus Ebola.")
@@ -226,32 +225,28 @@ elif (page == "Présentation du projet"):
         highlight=True,
     ).add_to(m)
 
-    """
+
     #essai d'ajout de legende interactive sur folium
     #non fontcionnel erreur: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
-    NIL = folium.features.GeoJson(
-        state_geo,
-        style_function=style_function,
-        control=False,
-        highlight_function=highlight_function,
-        tooltip=folium.features.GeoJsonTooltip(
-            fields=[map_df['Country'], map_df['Cumulative no. of confirmed, probable and suspected cases']],
-            aliases=['Country: ', 'Cumulative no. of confirmed, probable and suspected cases'],
-            style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
+    #NIL = folium.features.GeoJson(
+        #state_geo,
+        #style_function=style_function,
+        #control=False,
+        #highlight_function=highlight_function,
+        #tooltip=folium.features.GeoJsonTooltip(
+            #fields=[map_df['Country'], map_df['Cumulative no. of confirmed, probable and suspected cases']],
+            #aliases=['Country: ', 'Cumulative no. of confirmed, probable and suspected cases'],
+            #style=("background-color: white; color: #333333; font-family: arial; font-size: 12px; padding: 10px;")
             #sticky=True
-            )
-    )
-    m.add_child(NIL)
-    m.keep_in_front(NIL)
-    folium.LayerControl().add_to(m)
-    """
+            #)
+    #)
+    #m.add_child(NIL)
+    #m.keep_in_front(NIL)
+    #folium.LayerControl().add_to(m)
+
 
     # call to render Folium map in Streamlit
     folium_static(m)
-
-    #inutile - a supprimer
-    #dfcases = df.groupby(["Country", "Date"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
-    #st.write(dfcases)
 
     test = df
     output = test.groupby(["Date", "Country"])["Cumulative no. of confirmed, probable and suspected cases"].sum()
@@ -276,6 +271,6 @@ elif (page == "Voir le dataset"):
     st.write(df)
 
     st.subheader("Dates importantes")
-    st.write("Ce dataset a été crée par notre équipe afin de rassembler les dates importantes liées à l'épidémie d'Ebola.")
+    st.write("Ce dataset a été créé par notre équipe afin de rassembler les dates importantes liées à l'épidémie d'Ebola.")
     date["date"] = pd.to_datetime(date["date"])
     st.write(date)
