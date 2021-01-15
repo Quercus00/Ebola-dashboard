@@ -1,8 +1,3 @@
-# TODO Étudier les corrélation entre pays limitrophes
-# TODO Étudier les politiques des pays et ajouter sur les graph quand il y a eu par ex une campagne de vaccination pour voir si y a eu des évolutions
-# TODO Peut être croiser avec d'autres données pour pas que ce soit trop "léger"
-# TODO Utiliser folium pour des cartographies interactives stylées (compatible streamlit)
-
 import streamlit as st
 import pandas as pd
 from streamlit_folium import folium_static
@@ -11,12 +6,13 @@ import json
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, Title
 import plotly.express as px
-import datetime
 
+#ouverture du csv ebola
 df = pd.read_csv("ebola_2014_2016_clean.csv")
 dfFolium = pd.read_csv("ebola_2014_2016_clean.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 
+#ouverture du csv dates/actions
 date = pd.read_csv("dates.csv")
 date["date"] = pd.to_datetime(date["date"])
 
@@ -200,6 +196,8 @@ elif (page == "Présentation du projet"):
     for i in state_geo['features']:
         i['id'] = i['properties']['name']
 
+    #pour la légende sur la map folium
+    #----non fonctionnel
     style_function = lambda x: {'fillColor': '#ffffff',
                                 'color': '#000000',
                                 'fillOpacity': 0.1,
@@ -208,6 +206,7 @@ elif (page == "Présentation du projet"):
                                     'color': '#000000',
                                     'fillOpacity': 0.50,
                                     'weight': 0.1}
+    #-----
 
     folium.Choropleth(
         geo_data=state_geo,
